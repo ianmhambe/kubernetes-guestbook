@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Guestbook</title>
+  <style>
+    body { font-family: Arial; text-align: center; }
+    input, button { padding: 10px; margin: 10px; }
+    #messages { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Guestbook</h1>
+  <form action="/message" method="POST">
+    <input type="text" name="message" placeholder="Write a message" required>
+    <button type="submit">Submit</button>
+  </form>
+  <div id="messages"></div>
+
+  <script>
+    async function loadMessages() {
+      const res = await fetch('/messages');
+      const messages = await res.json();
+      document.getElementById('messages').innerText = 
+        messages.map(m => m.content).join('\n') || 'No messages yet';
+    }
+    loadMessages();
+    document.querySelector('form').addEventListener('submit', () => setTimeout(loadMessages, 500));
+  </script>
+</body>
+</html>
